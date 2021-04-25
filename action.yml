@@ -1,5 +1,5 @@
 name: "Heroku Build"
-description: "Deply to Heroku using the Platform API"
+description: "Deploy to Heroku using the Platform API"
 branding:
   icon: "upload-cloud"
   color: "purple"
