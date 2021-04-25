@@ -1,5 +1,5 @@
 name: "Heroku Build"
-description: "Upload release and trigger build on Heroku"
+description: "Deply to Heroku using the Platform API"
 inputs:
   app-name:
     description: "Name of Heroku application"
@@ -15,14 +15,10 @@ runs:
   using: "composite"
   steps:
     - run: |
-        tar -czvf release.tgz --exclude .git ${{ inputs.path }}
-        ls -lh release.tgz
-        sources=`curl -v -X POST https://api.heroku.com/apps/${{ inputs.app-name }}/sources -H 'Accept: application/vnd.heroku+json; version=3' -H 'Authorization: Bearer ${{ inputs.api-key }}'`
-        echo $sources
+        tar -czf release.tgz --exclude .git ${{ inputs.path }}
+        sources=`curl -X POST https://api.heroku.com/apps/${{ inputs.app-name }}/sources -H 'Accept: application/vnd.heroku+json; version=3' -H 'Authorization: Bearer ${{ inputs.api-key }}'`
         get_url=`echo $(jq -r '.source_blob.get_url' <<< "$sources")`
-        echo $get_url
         put_url=`echo $(jq -r '.source_blob.put_url' <<< "$sources")`
-        echo $put_url
-        curl -v $put_url -X PUT -H "Content-Type:" -H "Accept: application/vnd.heroku+json; version=3" --data-binary @release.tgz
-        curl -v -X POST https://api.heroku.com/apps/${{ inputs.app-name }}/builds -H 'Content-Type: application/json' -H 'Authorization: Bearer ${{ inputs.api-key }}' -H 'Accept: application/vnd.heroku+json; version=3' -d "{\"source_blob\":{\"url\":\"$get_url\",\"version\":\"`git rev-parse HEAD`\"}}"
+        curl $put_url -X PUT -H "Content-Type:" -H "Accept: application/vnd.heroku+json; version=3" --data-binary @release.tgz
+        curl -X POST https://api.heroku.com/apps/${{ inputs.app-name }}/builds -H 'Content-Type: application/json' -H 'Authorization: Bearer ${{ inputs.api-key }}' -H 'Accept: application/vnd.heroku+json; version=3' -d "{\"source_blob\":{\"url\":\"$get_url\",\"version\":\"`git rev-parse HEAD`\"}}"
       shell: bash
