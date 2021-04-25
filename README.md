@@ -1,5 +1,7 @@
 # Heroku Build
 
+![GitHub](https://img.shields.io/github/license/AkhileshNS/heroku-deploy.svg)
+
 ## Getting Started
 
 To get started using the action, just make sure to have a [Procfile](https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-a-procfile) or a [Dockerfile](https://docs.docker.com/engine/reference/builder/) in your project and then create a folder called **.github** and inside it, create another folder called **workflows**. Finally inside the workflows folder, create a file called **main.yml** with the following contents:
