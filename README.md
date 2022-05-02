@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Deploy to Heroku
-        uses: behe/heroku-build@v1
+        uses: behe/heroku-build@v1.1
         with:
           app-name: "your-app-name-on-heroku"
           api-key: "${{secrets.HEROKU_API_KEY}}"
