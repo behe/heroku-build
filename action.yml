@@ -27,5 +27,5 @@ runs:
         version=`git rev-parse HEAD`
         builds=`curl -X POST https://api.heroku.com/apps/${{ inputs.app-name }}/builds -H 'Content-Type: application/json' -H 'Authorization: Bearer ${{ inputs.api-key }}' -H 'Accept: application/vnd.heroku+json; version=3' -d "{\"source_blob\":{\"url\":\"$get_url\",\"version\":\"$version\"}}"`
         output_stream_url=`echo $(jq -r '.output_stream_url' <<< "$builds")`
-        curl -sS $output_stream_url -H "Accept: application/vnd.heroku\+json; version=3" -H "User-Agent: github-actions"
+        curl -sSN $output_stream_url -H "Accept: application/vnd.heroku\+json; version=3" -H "User-Agent: github-actions"
       shell: bash
